@@ -30,7 +30,7 @@ private:
     class TextImpl;
     class FormulaImpl;
 
-    void InvalidateCacheRecursive(void);							//Инвалидация кэша
+    void InvalidateCache(void);							//Инвалидация кэша
     bool CircularDependency(const Impl& inputImpl) const;			//Проверка на цикличность формулы 
 
     std::unique_ptr<Impl> impl_;

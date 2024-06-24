@@ -110,7 +110,7 @@ Cell::~Cell() {}											                    //Деструктор
 
 void Cell::Set(std::string text) {
 
-    InvalidateCacheRecursive();                                                 //Инвалидируем кэш
+    InvalidateCache();                                                          //Инвалидируем кэш
     
     
     if (text.size() == 0) {									                    //Если передали пустой текст, то создаём пустую ячейку(указатель)
@@ -159,10 +159,10 @@ void Cell::Clear() {
 }
 
 
-void Cell::InvalidateCacheRecursive(void) {
+void Cell::InvalidateCache(void) {
     if (impl_->CacheNotEmpty()) {
         impl_->ClearCache();
-        //Возможно нужна инвалидация зависимостей ячеек
+        /*Возможно надо инвалидировать зависимости, тогда придётся сделать рекурсивной*/
     }
 }
 bool Cell::CircularDependency(const Impl& inputImpl) const {
