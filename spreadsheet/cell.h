@@ -10,7 +10,7 @@ class Sheet;
 
 class Cell : public CellInterface {
 public:
-    Cell(Sheet& sheet);
+    Cell(Sheet& sh);
     ~Cell();
 
     void Set(std::string text);
@@ -19,18 +19,22 @@ public:
     Value GetValue() const override;
     std::string GetText() const override;
     std::vector<Position> GetReferencedCells() const override;
-
-    bool IsReferenced() const;
+    bool IsReferenced() const;          //Проверка на зависимость
+    //void ClearCache();                // Внутри FormulaImpl
+    //bool CacheIsEmpty() const;        // Внутри FormulaImpl
 
 private:
+
     class Impl;
     class EmptyImpl;
     class TextImpl;
     class FormulaImpl;
 
+    void InvalidateCacheRecursive(void);							//Инвалидация кэша
+    bool CircularDependency(const Impl& inputImpl) const;			//Проверка на цикличность формулы 
+
     std::unique_ptr<Impl> impl_;
-
-    // Добавьте поля и методы для связи с таблицей, проверки циклических 
-    // зависимостей, графа зависимостей и т. д.
-
+    Sheet& sheet_;
+    std::unordered_set<Cell*> dependOnOther;                        //Сет ячеек которые зависят от текущей
+    std::unordered_set<Cell*> dependToThis;                         //Сет ячеек от которых зависит текущая
 };
